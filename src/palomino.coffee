@@ -4,6 +4,9 @@ Webkit = imports.gi.WebKit2
 Webex = imports.gi.WebKit2WebExtension
 Glib = imports.gi.GLib
 Gdk = imports.gi.Gdk
+Gio = imports.gi.Gio
+
+SPACING = 10
 
 Palomino = new Lang.Class({
   Name: 'Palomino'
@@ -26,7 +29,7 @@ Palomino = new Lang.Class({
 
   _buildUI: ->
     # Create the application window
-    @_window = new Gtk.ApplicationWindow({
+    @_window = new Gtk.Window({
       application: @application
       title: 'Palomino'
       default_width: 1600
@@ -36,8 +39,28 @@ Palomino = new Lang.Class({
     @_window.set_icon_from_file(\
     '/home/macco/Listings/Palomino/resources/palomino.svg')
     # create a webview to show the web app
+    print(Gtk.Orientation.VERTICAL)
+    @_vBox = new Gtk.Box({
+      orientation: Gtk.Orientation.VERTICAL
+      spacing: SPACING
+      })
     @_webview = new Webkit.WebView()
     @_mousetarget = new Webkit.HitTestResult()
+
+    @_headerbar = new Gtk.HeaderBar()
+    @_headerbar.set_title("Palomino")
+    @_headerbar.set_show_close_button(true)
+    @_window.set_titlebar(@_headerbar)
+
+    @_settingsButton = new Gtk.Button()
+    @_settingsIcon = new Gio.ThemedIcon({
+      name: "preferences-system-symbolic"
+      })
+    @_settingsImage = new Gtk.Image({
+      gicon: @_settingsIcon
+      })
+    @_settingsButton.add(@_settingsImage)
+    @_headerbar.pack_end(@_settingsButton)
 
     @_webview.connect('show-notification', Lang.bind(@, @_onShowNotification))
     @_webview.connect('decide-policy', Lang.bind(@, @_onDecidePolicy))
