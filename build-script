@@ -1,0 +1,1 @@
+echo '#!/usr/bin/env gjs' | cat - build/palomino.js > bin/palomino
