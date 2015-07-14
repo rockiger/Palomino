@@ -53,7 +53,7 @@
       this._window.set_titlebar(this._headerbar);
       this._settingsButton = new Gtk.Button();
       this._settingsIcon = new Gio.ThemedIcon({
-        name: "emblem-system-symbolic"
+        name: "preferences-system-symbolic"
       });
       this._settingsImage = new Gtk.Image({
         gicon: this._settingsIcon
