@@ -23,13 +23,17 @@
     _init: function() {
       this.application = new Gtk.Application();
       this.application.connect('activate', Lang.bind(this, this._onActivate));
-      return this.application.connect('startup', Lang.bind(this, this._onStartup));
+      this.application.connect('startup', Lang.bind(this, this._onStartup));
+      return this.application.connect('shutdown', Lang.bind(this, this._onShutdown));
     },
     _onActivate: function() {
       return this._window.present();
     },
     _onStartup: function() {
       return this._buildUI();
+    },
+    _onShutdown: function() {
+      return print("Shutdown");
     },
     _buildUI: function() {
       this._window = new Gtk.Window({

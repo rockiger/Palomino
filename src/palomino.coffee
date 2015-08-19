@@ -18,6 +18,7 @@ Palomino = new Lang.Class({
     # connect 'activate' and 'startup' signals to the callback functions
     @application.connect('activate', Lang.bind(@, @_onActivate))
     @application.connect('startup', Lang.bind(@, @_onStartup))
+    @application.connect('shutdown', Lang.bind(@, @_onShutdown))
 
   # callback function for 'activate'
   _onActivate: ->
@@ -26,6 +27,9 @@ Palomino = new Lang.Class({
   # callback ffunction for 'startup'
   _onStartup: ->
     @_buildUI()
+
+  _onShutdown: ->
+    print("Shutdown")
 
   _buildUI: ->
     # Create the application window
