@@ -113,7 +113,7 @@ const MainWindow = new Lang.Class({
               comments: _("Demo JS Application and template"),
               copyright: 'Copyright 2013 The gjs developers',
               license_type: Gtk.License.GPL_2_0,
-              logo_icon_name: 'com.example.Gtk.JSApplication',
+              logo_icon_name: 'com.rockiger.Gtk.Palomino',
               version: pkg.version,
               website: 'http://www.example.com/gtk-js-app/',
               wrap_license: true,

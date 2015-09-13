@@ -1,5 +1,5 @@
 AC_PREREQ(2.63)
-AC_INIT([com.example.Gtk.JSApplication], [0.1],
+AC_INIT([com.rockiger.Gtk.Palomino], [0.1],
         [bugs@js-app.example.com],
         [gtk-js-app],
         [http://www.example.com/gtk-js-app/])

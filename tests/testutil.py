@@ -14,7 +14,7 @@ from dogtail.procedural import *
 import os, sys
 import subprocess
 
-APPLICATION_ID = "com.example.Gtk.JSApplication"
+APPLICATION_ID = "com.rockiger.Gtk.Palomino"
 
 _bus = None
 

@@ -2,8 +2,8 @@
 Type=Application
 _Name=JS Application
 _Comment=Demo JS Application and template
-Icon=com.example.Gtk.JSApplication
-Exec=gapplication launch com.example.Gtk.JSApplication
+Icon=com.rockiger.Gtk.Palomino
+Exec=gapplication launch com.rockiger.Gtk.Palomino
 DBusActivatable=true
 StartupNotify=true
 _Keywords=gtk;gjs;demo;development;
