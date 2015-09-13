@@ -1,12 +1,14 @@
 Gtk = imports.gi.Gtk
 Lang = imports.lang
 Webkit = imports.gi.WebKit2
-Webex = imports.gi.WebKit2WebExtension
+# Webex = imports.gi.WebKit2WebExtension
 Glib = imports.gi.GLib
 Gdk = imports.gi.Gdk
 Gio = imports.gi.Gio
 
 SPACING = 10
+
+# TODO NewMessageWindow = new Gtk.Window() in eigene Datei
 
 Palomino = new Lang.Class({
   Name: 'Palomino'
@@ -42,8 +44,7 @@ Palomino = new Lang.Class({
       })
     @_window.set_icon_from_file(\
     '/home/macco/Listings/Palomino/resources/palomino.svg')
-    # create a webview to show the web app
-    print(Gtk.Orientation.VERTICAL)
+    # create a webview to show the web apps
     @_vBox = new Gtk.Box({
       orientation: Gtk.Orientation.VERTICAL
       spacing: SPACING
@@ -56,6 +57,16 @@ Palomino = new Lang.Class({
     @_headerbar.set_show_close_button(true)
     @_window.set_titlebar(@_headerbar)
 
+    @_newMessageButton = new Gtk.Button()
+    @_newMessageIcon = new Gio.ThemedIcon({
+      name: "list-add-symbolic"
+      })
+    @_newMessageImage = new Gtk.Image({
+      gicon: @_newMessageIcon
+      })
+    @_newMessageButton.add(@_newMessageImage)
+    @_newMessageButton.connect('clicked', Lang.bind(@, @_onClickNewMessageBtn))
+
     @_settingsButton = new Gtk.Button()
     @_settingsIcon = new Gio.ThemedIcon({
       name: "preferences-system-symbolic"
@@ -65,6 +76,7 @@ Palomino = new Lang.Class({
       })
     @_settingsButton.add(@_settingsImage)
     @_headerbar.pack_end(@_settingsButton)
+    @_headerbar.pack_start(@_newMessageButton)
 
     @_webview.connect('show-notification', Lang.bind(@, @_onShowNotification))
     @_webview.connect('decide-policy', Lang.bind(@, @_onDecidePolicy))
@@ -74,8 +86,8 @@ Palomino = new Lang.Class({
     Lang.bind(@, @_onMouseTargetChanged))
 
     # load gmail
-    @_webview.load_uri('https://mail.google.com', null)
     @_webcontext = @_webview.web_context
+    @_webcontext.set_cache_model(Webkit.CacheModel.DOCUMENT_VIEWER)
     @_cookie_manager = @_webcontext.get_cookie_manager()
     @_cookie_manager.set_persistent_storage('/home/macco/.palomino_cookies.txt',
       Webkit.CookiePersistentStorage.TEXT)
@@ -83,6 +95,7 @@ Palomino = new Lang.Class({
     @_websettings.set_javascript_can_open_windows_automatically(true)
     @_websettings.set_allow_modal_dialogs(true)
     @_websettings.set_enable_smooth_scrolling(true)
+    @_webview.load_uri('https://mail.google.com', null)
     @_window.add(@_webview)
 
     @_window.show_all()
@@ -114,7 +127,12 @@ Palomino = new Lang.Class({
       print(hitTestResult.get_link_uri())
       @_mousetarget = hitTestResult
     return @_mousetarget
+
+  _onClickNewMessageBtn: ->
+    print('onClickNewMessageBtn')
   })
+
+
 
 
 # run Palomino
