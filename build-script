@@ -1,1 +1,1 @@
-echo '#!/usr/bin/env gjs' | cat - build/palomino.js > bin/palomino
+echo '#!/usr/bin/env gjs' | cat - src/palomino.js > bin/palomino

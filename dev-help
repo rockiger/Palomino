@@ -1,2 +1,2 @@
-coffee -c -o build src/palomino.coffee
-gjs build/palomino.js
+coffee -c -o src coffee/palomino.coffee
+gjs src/palomino.js
