@@ -4,7 +4,7 @@
 
 jsdir = $(pkgdatadir)
 js_DATA = \
-	main.js
+	palomino.js
 
 bin_SCRIPTS = main.js
 
@@ -12,5 +12,3 @@ EXTRA_DIST = $(js_DATA)
 
 uninstall-local:
 	-rm -r $(jsdir)
-
-
