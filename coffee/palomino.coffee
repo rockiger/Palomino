@@ -65,7 +65,6 @@ Palomino = new Lang.Class({
       gicon: @_newMessageIcon
       })
     @_newMessageButton.add(@_newMessageImage)
-    @_newMessageButton.connect('clicked', Lang.bind(@, @_onClickNewMessageBtn))
 
     @_settingsButton = new Gtk.Button()
     @_settingsIcon = new Gio.ThemedIcon({
@@ -77,13 +76,6 @@ Palomino = new Lang.Class({
     @_settingsButton.add(@_settingsImage)
     @_headerbar.pack_end(@_settingsButton)
     @_headerbar.pack_start(@_newMessageButton)
-
-    @_webview.connect('show-notification', Lang.bind(@, @_onShowNotification))
-    @_webview.connect('decide-policy', Lang.bind(@, @_onDecidePolicy))
-    @_webview.connect('create', Lang.bind(@, @_onCreate))
-    @_webview.connect('script-dialog', Lang.bind(@, @_onScriptDialog))
-    @_webview.connect('mouse-target-changed', \
-    Lang.bind(@, @_onMouseTargetChanged))
 
     # load gmail
     @_webcontext = @_webview.web_context
@@ -98,12 +90,24 @@ Palomino = new Lang.Class({
     @_webview.load_uri('https://mail.google.com', null)
     @_window.add(@_webview)
 
+    # connect events
+
+    @_newMessageButton.connect('clicked', Lang.bind(@, @_onClickNewMessageBtn))
+    @_webview.connect('show-notification', Lang.bind(@, @_onShowNotification))
+    @_webview.connect('decide-policy', Lang.bind(@, @_onDecidePolicy))
+    @_webview.connect('create', Lang.bind(@, @_onCreate))
+    @_webview.connect('script-dialog', Lang.bind(@, @_onScriptDialog))
+    @_webview.connect('mouse-target-changed', \
+    Lang.bind(@, @_onMouseTargetChanged))
+    @_webcontext.connect('download-started', Lang.bind(@, @_onDownloadStarted))
+
     @_window.show_all()
 
   _onShowNotification: ->
     print('show-notification')
 
   _onDecidePolicy: (webview,policyDecision,policyDecisionType) ->
+    print('decide-policy')
     if policyDecisionType is Webkit.PolicyDecisionType.NEW_WINDOW_ACTION
       Gtk.show_uri(null, policyDecision.get_request().get_uri(),
       Gdk.CURRENT_TIME)
@@ -130,9 +134,20 @@ Palomino = new Lang.Class({
 
   _onClickNewMessageBtn: ->
     print('onClickNewMessageBtn')
+
+  _onDownloadStarted: (webcontext, download) ->
+    print('fileDownload')
+    download.connect('decide-destination', Lang.bind(@, @_showInfobar))
+    download.connect('finished', Lang.bind(@, @_hideInfobar))
+
+  _showInfobar: (download, suggested_filename) ->
+    print('Started download of ' + suggested_filename )
+    false
+
+  _hideInfobar: (download) ->
+    print('hideInfobar')
+
   })
-
-
 
 
 # run Palomino

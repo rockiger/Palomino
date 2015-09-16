@@ -60,7 +60,6 @@
         gicon: this._newMessageIcon
       });
       this._newMessageButton.add(this._newMessageImage);
-      this._newMessageButton.connect('clicked', Lang.bind(this, this._onClickNewMessageBtn));
       this._settingsButton = new Gtk.Button();
       this._settingsIcon = new Gio.ThemedIcon({
         name: "preferences-system-symbolic"
@@ -71,11 +70,6 @@
       this._settingsButton.add(this._settingsImage);
       this._headerbar.pack_end(this._settingsButton);
       this._headerbar.pack_start(this._newMessageButton);
-      this._webview.connect('show-notification', Lang.bind(this, this._onShowNotification));
-      this._webview.connect('decide-policy', Lang.bind(this, this._onDecidePolicy));
-      this._webview.connect('create', Lang.bind(this, this._onCreate));
-      this._webview.connect('script-dialog', Lang.bind(this, this._onScriptDialog));
-      this._webview.connect('mouse-target-changed', Lang.bind(this, this._onMouseTargetChanged));
       this._webcontext = this._webview.web_context;
       this._webcontext.set_cache_model(Webkit.CacheModel.DOCUMENT_VIEWER);
       this._cookie_manager = this._webcontext.get_cookie_manager();
@@ -86,12 +80,20 @@
       this._websettings.set_enable_smooth_scrolling(true);
       this._webview.load_uri('https://mail.google.com', null);
       this._window.add(this._webview);
+      this._newMessageButton.connect('clicked', Lang.bind(this, this._onClickNewMessageBtn));
+      this._webview.connect('show-notification', Lang.bind(this, this._onShowNotification));
+      this._webview.connect('decide-policy', Lang.bind(this, this._onDecidePolicy));
+      this._webview.connect('create', Lang.bind(this, this._onCreate));
+      this._webview.connect('script-dialog', Lang.bind(this, this._onScriptDialog));
+      this._webview.connect('mouse-target-changed', Lang.bind(this, this._onMouseTargetChanged));
+      this._webcontext.connect('download-started', Lang.bind(this, this._onDownloadStarted));
       return this._window.show_all();
     },
     _onShowNotification: function() {
       return print('show-notification');
     },
     _onDecidePolicy: function(webview, policyDecision, policyDecisionType) {
+      print('decide-policy');
       if (policyDecisionType === Webkit.PolicyDecisionType.NEW_WINDOW_ACTION) {
         Gtk.show_uri(null, policyDecision.get_request().get_uri(), Gdk.CURRENT_TIME);
       }
@@ -118,6 +120,18 @@
     },
     _onClickNewMessageBtn: function() {
       return print('onClickNewMessageBtn');
+    },
+    _onDownloadStarted: function(webcontext, download) {
+      print('fileDownload');
+      download.connect('decide-destination', Lang.bind(this, this._showInfobar));
+      return download.connect('finished', Lang.bind(this, this._hideInfobar));
+    },
+    _showInfobar: function(download, suggested_filename) {
+      print('Started download of ' + suggested_filename);
+      return false;
+    },
+    _hideInfobar: function(download) {
+      return print('hideInfobar');
     }
   });
 
