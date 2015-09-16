@@ -70,6 +70,17 @@
       this._settingsButton.add(this._settingsImage);
       this._headerbar.pack_end(this._settingsButton);
       this._headerbar.pack_start(this._newMessageButton);
+      this._revealer = new Gtk.Revealer();
+      this._revealer.set_transition_duration(1000);
+      this._revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_LEFT);
+      this._message = new Gtk.Label();
+      this._msgState = this._message.get_state();
+      this._msgBgColor = new Gdk.RGBA();
+      this._msgBgColor.parse("#f9edbe");
+      this._message.override_background_color(this._msgState, this._msgBgColor);
+      this._message.set_padding(10, 0);
+      this._revealer.add(this._message);
+      this._headerbar.pack_end(this._revealer);
       this._webcontext = this._webview.web_context;
       this._webcontext.set_cache_model(Webkit.CacheModel.DOCUMENT_VIEWER);
       this._cookie_manager = this._webcontext.get_cookie_manager();
@@ -127,11 +138,17 @@
       return download.connect('finished', Lang.bind(this, this._hideInfobar));
     },
     _showInfobar: function(download, suggested_filename) {
+      this._message.set_markup("<b>Downloading: " + suggested_filename + "</b>");
+      this._revealer.set_reveal_child(true);
       print('Started download of ' + suggested_filename);
       return false;
     },
     _hideInfobar: function(download) {
-      return print('hideInfobar');
+      print('hideInfobar');
+      return Glib.timeout_add(Glib.PRIORITY_DEFAULT, 2000, Lang.bind(this, function() {
+        this._revealer.set_reveal_child(false);
+        return false;
+      }));
     }
   });
 

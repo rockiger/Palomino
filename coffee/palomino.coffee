@@ -77,6 +77,18 @@ Palomino = new Lang.Class({
     @_headerbar.pack_end(@_settingsButton)
     @_headerbar.pack_start(@_newMessageButton)
 
+    @_revealer = new Gtk.Revealer()
+    @_revealer.set_transition_duration(1000)
+    @_revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_LEFT)
+    @_message = new Gtk.Label()
+    @_msgState = @_message.get_state()
+    @_msgBgColor = new Gdk.RGBA()
+    @_msgBgColor.parse("#f9edbe")
+    @_message.override_background_color(@_msgState, @_msgBgColor)
+    @_message.set_padding(10, 0)
+    @_revealer.add(@_message)
+    @_headerbar.pack_end(@_revealer)
+
     # load gmail
     @_webcontext = @_webview.web_context
     @_webcontext.set_cache_model(Webkit.CacheModel.DOCUMENT_VIEWER)
@@ -141,11 +153,17 @@ Palomino = new Lang.Class({
     download.connect('finished', Lang.bind(@, @_hideInfobar))
 
   _showInfobar: (download, suggested_filename) ->
+    @_message.set_markup("<b>Downloading: " + suggested_filename + "</b>")
+    @_revealer.set_reveal_child(true)
     print('Started download of ' + suggested_filename )
     false
 
   _hideInfobar: (download) ->
     print('hideInfobar')
+    Glib.timeout_add(Glib.PRIORITY_DEFAULT, 2000, Lang.bind(@, ->
+      @_revealer.set_reveal_child(false)
+      false
+    ))
 
   })
 
