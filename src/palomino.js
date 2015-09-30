@@ -19,7 +19,10 @@
   Palomino = new Lang.Class({
     Name: 'Palomino',
     _init: function() {
-      this.application = new Gtk.Application();
+      this.application = new Gtk.Application({
+        application_id: 'com.rockiger.palomino'
+      });
+      this._buildActions();
       this.application.connect('activate', Lang.bind(this, this._onActivate));
       this.application.connect('startup', Lang.bind(this, this._onStartup));
       return this.application.connect('shutdown', Lang.bind(this, this._onShutdown));
@@ -41,7 +44,6 @@
         default_height: 900,
         window_position: Gtk.WindowPosition.CENTER
       });
-      this._window.set_icon_from_file('/home/macco/Listings/Palomino/resources/palomino.svg');
       this._vBox = new Gtk.Box({
         orientation: Gtk.Orientation.VERTICAL,
         spacing: SPACING
@@ -99,6 +101,17 @@
       this._webview.connect('mouse-target-changed', Lang.bind(this, this._onMouseTargetChanged));
       this._webcontext.connect('download-started', Lang.bind(this, this._onDownloadStarted));
       return this._window.show_all();
+    },
+    _buildActions: function() {
+      var newMailAction;
+      print('_buildActions');
+      newMailAction = new Gio.SimpleAction({
+        name: 'new-mail'
+      });
+      newMailAction.connect('activate', Lang.bind(this, function() {
+        return print('new-mail');
+      }));
+      return this.application.add_action(newMailAction);
     },
     _onShowNotification: function() {
       return print('show-notification');

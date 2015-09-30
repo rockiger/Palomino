@@ -1,12 +1,12 @@
 fs = require('fs.extra')
 path = require('path')
 
-NAME = 'myapp'
-ID = 'org.example.myapp'
+NAME = 'Palomino'
+ID = 'com.rockiger.palomino'
 BINDIR = '/usr/bin'
 DATADIR = '/usr/share'
-SOURCENAME = 'dbus-example.js'
-DESTNAME = 'myapp'
+SOURCENAME = './bin/palomino'
+DESTNAME = 'palomino'
 
 #helper
 existsSync = (filePath) ->
@@ -38,5 +38,5 @@ if existsSync(path.join(DATADIR,'dbus-1/services', ID + '.service'))
   fs.remove(path.join(DATADIR,'dbus-1/services', ID + '.service'), (err) ->
     if err?
       throw err
-    console.log("Copied service file")
+    console.log("Deleted service file")
   )

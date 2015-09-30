@@ -6,17 +6,17 @@
 
   path = require('path');
 
-  NAME = 'myapp';
+  NAME = 'Palomino';
 
-  ID = 'org.example.myapp';
+  ID = 'com.rockiger.palomino';
 
   BINDIR = '/usr/bin';
 
   DATADIR = '/usr/share';
 
-  SOURCENAME = 'dbus-example.js';
+  SOURCENAME = './bin/palomino';
 
-  DESTNAME = 'myapp';
+  DESTNAME = 'palomino';
 
   existsSync = function(filePath) {
     var err, error;

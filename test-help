@@ -1,0 +1,3 @@
+coffee -c -o src coffee/palomino.coffee
+echo '#!/usr/bin/env gjs' | cat - src/palomino.js > bin/palomino
+sudo node install.js

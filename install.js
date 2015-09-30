@@ -6,19 +6,17 @@
 
   path = require('path');
 
-  NAME = 'myapp';
+  NAME = 'Palomino';
 
-  ID = 'org.example.myapp';
+  ID = 'com.rockiger.palomino';
 
   BINDIR = '/usr/bin';
 
   DATADIR = '/usr/share';
 
-  SOURCENAME = 'dbus-example.js';
+  SOURCENAME = './bin/palomino';
 
-  DESTNAME = 'myapp';
-
-  fs.chmodSync(path.join(BINDIR, DESTNAME), 0x1ed);
+  DESTNAME = 'palomino';
 
   fs.copy(SOURCENAME, path.join(BINDIR, DESTNAME), {
     replace: true
@@ -26,10 +24,11 @@
     if (err != null) {
       throw err;
     }
+    fs.chmodSync(path.join(BINDIR, DESTNAME), 0x1ed);
     return console.log("Copied binary");
   });
 
-  fs.copy('desktop', path.join(DATADIR, 'applications', ID + '.desktop'), {
+  fs.copy('./src/desktop', path.join(DATADIR, 'applications', ID + '.desktop'), {
     replace: true
   }, function(err) {
     if (err != null) {
@@ -38,7 +37,7 @@
     return console.log("Copied desktop file");
   });
 
-  fs.copy('dbus.service', path.join(DATADIR, 'dbus-1/services', ID + '.service'), {
+  fs.copy('./src/dbus.service', path.join(DATADIR, 'dbus-1/services', ID + '.service'), {
     replace: true
   }, function(err) {
     if (err != null) {

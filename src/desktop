@@ -1,0 +1,17 @@
+[Desktop Entry]
+Name=Palomino
+GenericName=Palomino - GMail for Gnome
+Exec=palomino %U
+Terminal=false
+Type=Application
+StartupNotify=true
+MimeType=application/mbox;message/rfc822;x-scheme-handler/mailto;
+Icon=palomino.svg
+Categories=GNOME;GTK;Email;Network;
+Keywords=email;mail;Google;Gmail;
+Actions=new-mail;
+DBusActivatable=true
+
+[Desktop Action new-mail]
+Name=Open a new Mail
+Exec=palomino --new-mail

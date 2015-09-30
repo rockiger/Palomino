@@ -9,13 +9,16 @@ Gio = imports.gi.Gio
 SPACING = 10
 
 # TODO NewMessageWindow = new Gtk.Window() in eigene Datei
+# es  wird mit jeder neuen Instanz _onActivate ausgelöst bei myapp
 
 Palomino = new Lang.Class({
   Name: 'Palomino'
 
   # Create the app
   _init: ->
-    @application = new Gtk.Application()
+    @application = new Gtk.Application({application_id: 'com.rockiger.palomino'})
+
+    @_buildActions()
 
     # connect 'activate' and 'startup' signals to the callback functions
     @application.connect('activate', Lang.bind(@, @_onActivate))
@@ -42,8 +45,8 @@ Palomino = new Lang.Class({
       default_height: 900
       window_position: Gtk.WindowPosition.CENTER
       })
-    @_window.set_icon_from_file(\
-    '/home/macco/Listings/Palomino/resources/palomino.svg')
+    #@_window.set_icon_from_file(\
+    #'/usr/palomino.svg')
     # create a webview to show the web apps
     @_vBox = new Gtk.Box({
       orientation: Gtk.Orientation.VERTICAL
@@ -114,6 +117,13 @@ Palomino = new Lang.Class({
     @_webcontext.connect('download-started', Lang.bind(@, @_onDownloadStarted))
 
     @_window.show_all()
+
+  _buildActions: ->
+    print('_buildActions')
+    newMailAction = new Gio.SimpleAction({name: 'new-mail'})
+    newMailAction.connect('activate', Lang.bind(@, ->
+      print('new-mail')))
+    @application.add_action(newMailAction)
 
   _onShowNotification: ->
     print('show-notification')
